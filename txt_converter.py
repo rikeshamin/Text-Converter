@@ -1,3 +1,4 @@
+import argparse
 import re
 
 class TextFormatter:
@@ -10,7 +11,7 @@ class TextFormatter:
     def remove_abstract(self, content):
         pattern = r'^\s*abstract\s*=\s*\{.*?\},?\s*[\r\n]*'
         return re.sub(pattern, '', content, flags=re.DOTALL | re.MULTILINE)
-
+    
     # edits the content for the correct indentation
     def correct_indentation(self, content):
         lines = content.splitlines()
@@ -24,7 +25,7 @@ class TextFormatter:
             else:
                 processed_lines.append(self.indent_level + stripped_line + '\n')
         return ''.join(processed_lines)
-
+    
     def format_file(self):
         with open(self.input_path, 'r', encoding='utf-8', errors='replace') as file:
             content = file.read()
@@ -34,9 +35,19 @@ class TextFormatter:
             file.write(content)
         print("Abstract sections removed and file formatted.")
 
-# change the directory path
+# Providing directory paths for input and output in command line. 
 if __name__ == "__main__":
-    input_file_path = r''
-    output_file_path = r''
-    formatter = FileFormatter(input_path=input_file_path, output_path=output_file_path)
+    parser = argparse.ArgumentParser(description="Remove abstract sections and reformat a references file.")
+    parser.add_argument("input_file", help="Path to the input file.")
+    parser.add_argument("output_file", help="Path to the output file.")
+    args = parser.parse_args()
+
+    formatter = TextFormatter(input_path=args.input_file, output_path=args.output_file)
     formatter.format_file()
+
+
+
+
+
+
+
